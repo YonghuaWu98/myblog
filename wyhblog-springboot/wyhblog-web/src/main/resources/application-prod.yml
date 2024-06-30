@@ -1,0 +1,4 @@
+# log 日志
+logging:
+  config: classpath:logback-wyhblog.xml
+

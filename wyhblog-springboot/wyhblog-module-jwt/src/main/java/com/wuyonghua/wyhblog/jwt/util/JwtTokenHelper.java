@@ -1,8 +1,9 @@
-package com.wuyonghua.wyhblog.jwt;
+package com.wuyonghua.wyhblog.jwt.util;
 
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -10,11 +11,14 @@ import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
-import java.security.SignatureException;
+
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Base64;
 import java.util.Date;
+
+import static com.wuyonghua.wyhblog.common.constant.MessageConstant.TOKEN_INVALIDATION;
+import static com.wuyonghua.wyhblog.common.constant.MessageConstant.TOKEN_NOT_AVAILABLE;
 
 /**
  * @author 吴勇华
@@ -29,6 +33,11 @@ public class JwtTokenHelper implements InitializingBean{
          */
         @Value("${jwt.issuer}")
         private String issuer;
+        /**
+        * Token 失效时间（分钟）
+        */
+        @Value("${jwt.tokenExpireTime}")
+        private Long tokenExpireTime;
         /**
          * 秘钥
          */
@@ -69,7 +78,7 @@ public class JwtTokenHelper implements InitializingBean{
         public String generateToken(String username) {
             LocalDateTime now = LocalDateTime.now();
             // Token 一个小时后失效
-            LocalDateTime expireTime = now.plusHours(1);
+            LocalDateTime expireTime = now.plusHours(tokenExpireTime);
 
             return Jwts.builder().setSubject(username)
                     .setIssuer(issuer)
@@ -87,10 +96,10 @@ public class JwtTokenHelper implements InitializingBean{
         public Jws<Claims> parseToken(String token) {
             try {
                 return jwtParser.parseClaimsJws(token);
-            } catch (MalformedJwtException | UnsupportedJwtException | IllegalArgumentException e) {
-                throw new BadCredentialsException("Token 不可用", e);
+            } catch (SignatureException | MalformedJwtException | UnsupportedJwtException | IllegalArgumentException e) {
+                throw new BadCredentialsException(TOKEN_NOT_AVAILABLE, e);
             } catch (ExpiredJwtException e) {
-                throw new CredentialsExpiredException("Token 失效", e);
+                throw new CredentialsExpiredException(TOKEN_INVALIDATION, e);
             }
         }
 
@@ -108,9 +117,33 @@ public class JwtTokenHelper implements InitializingBean{
             return base64Key;
         }
 
-        public static void main(String[] args) {
-            String key = generateBase64Key();
-            System.out.println("key: " + key);
+    /**
+     * 校验 Token 是否可用
+     * @param token
+     * @return
+     */
+    public void validateToken(String token) {
+        jwtParser.parseClaimsJws(token);
+    }
+
+    /**
+     * 解析 Token 获取用户名
+     * @param token
+     * @return
+     */
+    public String getUsernameByToken(String token) {
+        try {
+            Claims claims = jwtParser.parseClaimsJws(token).getBody();
+            String username = claims.getSubject();
+            return username;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        return null;
+    }
+//    public static void main(String[] args) {
+//        String key = generateBase64Key();
+//        System.out.println("key: " + key);
+//    }
 
 }

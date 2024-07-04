@@ -36,6 +36,17 @@
             <groupId>com.wuyonghua</groupId>
             <artifactId>wyhblog-module-common</artifactId>
         </dependency>
+        <!-- JWT 模块 -->
+        <dependency>
+            <groupId>com.wuyonghua</groupId>
+            <artifactId>wyhblog-module-jwt</artifactId>
+        </dependency>
+
+        <!-- Spring Security -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

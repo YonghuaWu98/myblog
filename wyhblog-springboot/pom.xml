@@ -54,6 +54,7 @@
         <mybatis-plus.version>3.5.2</mybatis-plus.version>
         <p6spy.version>3.9.1</p6spy.version>
         <jjwt.version>0.11.2</jjwt.version>
+        <spring.security.version>2.6.3</spring.security.version>
     </properties>
 
     <!-- 统一依赖管理 -->
@@ -127,6 +128,11 @@
                 <groupId>io.jsonwebtoken</groupId>
                 <artifactId>jjwt-jackson</artifactId>
                 <version>${jjwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-security</artifactId>
+                <version>${spring.security.version}</version>
             </dependency>
         </dependencies>
 

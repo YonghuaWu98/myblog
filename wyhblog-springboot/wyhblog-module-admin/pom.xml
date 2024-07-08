@@ -31,11 +31,13 @@
             <groupId>com.github.xiaoymin</groupId>
             <artifactId>knife4j-openapi2-spring-boot-starter</artifactId>
         </dependency>
-        <!-- 子模块依赖 -->
+        <!-- common模块依赖 -->
         <dependency>
             <groupId>com.wuyonghua</groupId>
             <artifactId>wyhblog-module-common</artifactId>
         </dependency>
+
+
         <!-- JWT 模块 -->
         <dependency>
             <groupId>com.wuyonghua</groupId>
@@ -47,6 +49,16 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
+        <!--参数校验-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+        <!-- web模块依赖 -->
+<!--        <dependency>-->
+<!--            <groupId>com.wuyonghua</groupId>-->
+<!--            <artifactId>wyhblog-web</artifactId>-->
+<!--        </dependency>-->
     </dependencies>
 
 </project>
